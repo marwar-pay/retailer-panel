@@ -3,8 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const axiosInstance = axios.create({
-  // baseURL: "https://api.zanithpay.com/",
-  baseURL: "http://192.168.1.4:5000/",
+  baseURL: "https://api.zanithpay.com/",
+  // baseURL: "http://192.168.1.4:5000/",
   headers: {
     "Content-Type": "application/json",
      },
