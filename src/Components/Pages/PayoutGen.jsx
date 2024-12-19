@@ -54,7 +54,7 @@ const PayoutGenerator = () => {
         setUserData(response.data.data);
         setFormData((prevFormData) => ({
           ...prevFormData,
-          userName: response.data.data.fullName,
+          userName: response.data.data.userName,
           authToken: response.data.data.trxAuthToken, // Add trxAuthToken to formData
         }));
       })
