@@ -10,6 +10,10 @@ import {
   Alert,
 } from "@mui/material";
 
+const generateRandomId = () => {
+    return Math.random().toString(36).slice(2, 22); // Generates a random 20-character ID
+  };
+
 const PayoutGenerator = () => {
   const API_ENDPOINT = "apiUser/v1/userRoute/userInfo";
   const [userData, setUserData] = useState(null);
@@ -19,7 +23,7 @@ const PayoutGenerator = () => {
     accountHolderName: "",
     accountNumber: "",
     ifscCode: "",
-    trxId: uuidv4(),
+    trxId: generateRandomId(),
     amount: "",
     bankName: "",
     authToken: "",  // Add trxAuthToken here
@@ -35,7 +39,7 @@ const PayoutGenerator = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await apiPost("apiAdmin/v1/payout/generatePayOut", {...formData, accountNumber:Number(formData?.accountNumber)});
+      const res = await apiPost("apiAdmin/v1/payout/generatePayOut", {...formData });
       setResponse(res.data);
       setError(null);
     } catch (err) {
