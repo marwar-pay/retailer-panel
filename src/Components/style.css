@@ -1,0 +1,177 @@
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --header-bg: #ffff;
+  --sidebar-bg: #ffffff;
+}
+
+.dark-mode {
+  --bg-color: #0e2337;
+  --text-color: #ffffff;
+  --header-bg: #0e2337;
+  --sidebar-bg: #0e2337;
+}
+
+.dark-mode, 
+.dark-mode p, 
+.dark-mode h1, 
+.dark-mode h2, 
+.dark-mode h3, 
+.dark-mode h4, 
+.dark-mode h5, 
+.dark-mode h6, 
+.dark-mode label, 
+.dark-mode td, 
+.dark-mode th { 
+    color: var(--text-color);
+}
+
+.dark-mode p {
+  color: #fff !important;
+}
+body.dark-mode {
+  background-color: var(--bg-color); 
+  color: var(--text-color); 
+}
+.dark-mode .value {
+    color: var(--text-color); 
+}
+.dark-mode .ant-layout.css-vn1oyg {
+  background: transparent;
+}
+.dark-mode .MuiPaper-root {
+  background-color: transparent !important; 
+  color: var(--text-color); 
+  box-shadow: rgba(248, 247, 247, 0.35) 0px 5px 15px !important;
+}
+.dark-mode .MuiInputBase-input {
+color: var(--text-color);
+}
+.dark-mode :where(.css-dev-only-do-not-override-vn1oyg).ant-layout.ant-layout-has-sider >.ant-layout, :where(.css-dev-only-do-not-override-vn1oyg).ant-layout.ant-layout-has-sider >.ant-layout-content {
+width: 0;
+background-color: transparent;
+}
+.dark-mode main.ant-layout-content.css-dev-only-do-not-override-vn1oyg {
+padding: 40px 40px !important;
+border-radius:0px !important;
+box-shadow: 0px 4px 8px rgba(255, 255, 255, 0.2);
+}
+.dark-mode .clrchnge {
+background: transparent !important;
+box-shadow: 0px 4px 8px rgba(255, 255, 255, 0.2);
+text-align: center !important;
+}
+
+.dark-mode .MuiBox-root.css-d0iuee {
+background: transparent !important;
+box-shadow: 0px 4px 8px rgba(255, 255, 255, 0.2);
+}
+.dark-mode button.MuiButtonBase-root.MuiTab-root.MuiTab-textColorPrimary.MuiTab-fullWidth.css-1hxxknx-MuiButtonBase-root-MuiTab-root {
+color: #fff !important;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+header {
+  background-color: var(--header-bg);
+}
+
+.sider {
+  background-color: var(--sidebar-bg);
+  }
+.dark-mode .sider , .dark-mode .header{
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+.dark-mode header.ant-layout-header.css-dev-only-do-not-override-vn1oyg {
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+.dark-mode ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-dark.css-dev-only-do-not-override-vn1oyg {
+  background-color: transparent !important;
+}
+.dark-mode .MuiButton-root {
+background: linear-gradient(45deg, #000000, #2196F3) !important;
+color: white !important;
+border-radius: 20px !important;
+padding: 10px 20px !important;
+transition: background-color 0.3s ease !important;
+}
+:where(.css-dev-only-do-not-override-vn1oyg).ant-menu-dark, :where(.css-dev-only-do-not-override-vn1oyg).ant-menu-dark>.ant-menu {
+color: rgba(255, 255, 255, 0.65);
+background: transparent !important;
+}
+.dark-mode thead {
+background-color: transparent !important;
+box-shadow: rgba(248, 247, 247, 0.35) 0px 5px 15px;
+}
+.dark-mode tr:nth-child(even) {
+background-color: transparent !important;
+
+}
+.dark-mode .table{
+box-shadow: rgba(248, 247, 247, 0.35) 0px 5px 15px
+}
+
+.dark-mode .css-5iifl-MuiPaper-root-MuiAppBar-root {
+
+background: linear-gradient(45deg, #000000, #2196F3) !important;
+
+}
+.dark-mode header.MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation4.MuiAppBar-root.MuiAppBar-colorPrimary.MuiAppBar-positionStatic.css-7i40l1 {
+background: linear-gradient(45deg, #000000, #2196F3) !important;
+border-radius:1em !important;
+}
+
+.dark-mode button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium.css-1wjzr1s-MuiButtonBase-root-MuiIconButton-root {
+color: #fff !important;
+}
+.dark-mode canvas {
+box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.dark-mode pre {
+background-color: transparent !important;
+color:#fff;
+}
+.dark-mode .css-1nxwxyi-MuiTableRow-root {
+background-color: transparent !important;
+}
+.dark-mode h6.MuiTypography-root.MuiTypography-h6.css-8zgow4-MuiTypography-root {
+font-weight: 600 !important;
+font-size: 18px !important;
+}
+
+.dark-mode :where(.css-dev-only-do-not-override-vn1oyg).ant-menu-dark, :where(.css-dev-only-do-not-override-vn1oyg).ant-menu-dark>.ant-menu {
+  color: rgba(255, 255, 255, 0.65);
+  background: #0e2337 !important;
+ }
+ 
+ .dark-mode .topsidebar {
+  background: transparent;
+  padding: 15px;
+  box-shadow: rgba(248, 247, 247, 0.35) 0px 5px 15px !important;
+ 
+  margin-bottom: 20px;
+  color: #fff;
+  border-radius: 1em;
+  transition: transform 0.2s ease-in-out;
+}
+.dark-mode .topsidebar:hover{
+  background:transparent !important;
+}
+.dark-mode li.ant-dropdown-menu-item {
+  color: #fff !important;
+}
+.dark-mode .ant-dropdown-menu {
+
+  background-color: #0e2337 !important;
+  box-shadow: rgba(248, 247, 247, 0.35) 0px 5px 15px !important;
+} 
+.dark-mode .ant-menu .ant-menu-sub{
+  background-color: #0e2337  !important;
+}
+.dark-mode .setdesigntofix{
+  background-color: #0e2337 !important;
+  margin-top:-30px !important;
+}

@@ -1,0 +1,603 @@
+/* index.css or App.css */
+@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+h1, h2, h3, h4, h5, h6, p, span, .Typography,.TableCell,.TextField {
+  font-family: 'Kanit', sans-serif !important;
+}
+body{
+  margin: 0;
+  padding: 0;
+}
+
+.topsidebar img {
+  width: 50%;
+  transition: transform 0.6s; /* Smooth transition */
+  float:right;
+}
+
+.topsidebar img:hover {
+  /* transform: rotateY(180deg);  */
+}
+.topsidebar {
+  background: linear-gradient(to right, #ffbf96, #fe7096);
+  padding: 15px; /* Padding for spacing */
+   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  margin-bottom:20px;
+  color:#fff;
+  border-radius:1em;
+  transition: transform 0.2s ease-in-out;
+}
+.topsidebar:hover {
+  transform: scale(1.03); /* Scale up on hover */
+  background: linear-gradient(to right, 
+  #90caf9, 
+  #73c8f9, 
+  #5fb7ef, 
+  #4ba3e0, 
+  #047edf, 
+  #ffbf96, 
+  #fe7096);
+
+
+}
+
+.row {
+  display: flex; /* Use flexbox for layout */
+}
+
+.sidebar-text {
+padding: 22px 0 0px 0px;
+  color: #fff; 
+  margin: 0; 
+}
+
+
+
+.fixed-logo {
+  position: sticky; /* Makes the logo stay fixed at the top */
+  top: 0;           /* Fixes the logo at the top of the sidebar */
+  z-index: 10;
+  background-color: var(--sidebar-bg); /* Same background as sidebar */
+  padding-bottom: 20px; /* Add some space below the logo */
+}
+
+
+
+
+
+.gqrapi h4 {
+    background: linear-gradient(45deg, #000000, #2196F3) !important;
+    color: #fff;
+    padding: 6px 19px;
+    border-radius: 10px;
+    margin: 30px 0px;
+    font-size:18px;
+  }
+  
+  
+  .gqrapi td {
+    border: 2px solid rgb(238, 238, 238);
+    font-size: 14px;
+  }
+  
+  button.MuiButtonBase-root.MuiTab-root.MuiTab-textColorPrimary.MuiTab-fullWidth.Mui-selected.css-1hxxknx-MuiButtonBase-root-MuiTab-root {
+    font-weight: 700;
+    font-size: 16px;
+  }
+  
+
+  .css-igs3ac {
+    text-align: left;
+    position: absolute;
+    inset: -5px 0px 0px;
+    margin: 0px;
+    padding: 0px 8px;
+    pointer-events: none;
+    border-radius: inherit;
+    /* border-style: solid; */
+    border-width: 1px;
+    overflow: hidden;
+    min-width: 0%;
+    border-color: rgba(0, 0, 0, 0.23);
+    border: none !important;
+    border-bottom: 1px solid !important ;
+}
+  
+:where(.css-vn1oyg).ant-menu-dark, :where(.css-vn1oyg).ant-menu-dark>.ant-menu {
+  color: rgba(255, 255, 255, 0.65); 
+  background: transparent !important;
+}
+.css-1l4w6pd {
+   margin-top: 25px !important;
+}
+nav.MuiPagination-root.MuiPagination-outlined.css-f3591o-MuiPagination-root {
+  margin-top: 20px;
+}
+  
+  
+  
+  .loginpage .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+    /* text-align: left; */
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border: none !important;
+    /* top: -5px; */
+    left: 0;
+    margin: 0;
+    padding: 0 8px;
+    border-bottom: 1px solid !important;
+    pointer-events: none;
+    border-radius: inherit;
+    border-style: solid;
+    /* border-width: 1px; */
+    /* overflow: hidden; */
+    /* min-width: 0%; */
+    /* border-color: rgba(0, 0, 0, 0.23); */
+  }
+  
+  .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+    /* text-align: left; */
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border: none !important;
+    /* top: -5px; */
+    left: 0;
+    margin: 0;
+    padding: 0 8px;
+    border-bottom: 1px solid !important;
+    pointer-events: none;
+    border-radius: inherit;
+    border-style: solid;
+  
+  }
+  
+  .login-title {
+    /* font-family: 'Nunito', sans-serif; */
+    font-size: 20px;
+    /* Adjust the size as needed */
+    font-weight: 700;
+    color: transparent;
+    /* Make text color transparent for gradient effect */
+    background: linear-gradient(90deg, #24407f, #001a47);
+    background-clip: text;
+    /* Clips the background to the text */
+    -webkit-background-clip: text;
+    /* For Safari compatibility */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    /* Add subtle shadow */
+    padding: 10px;
+    /* Add some padding */
+    transition: transform 0.3s ease-in-out;
+    /* Add smooth hover effect */
+    animation: gradientAnimation 3s ease infinite;
+  }
+  
+  .login-title:hover {
+    transform: scale(1.05);
+    /* Slightly scale up on hover */
+  }
+  
+  h1.MuiTypography-root.MuiTypography-h4.MuiTypography-gutterBottom.login-title.gradientAnimation.css-yvxppd-MuiTypography-root {
+    font-size: 38px;
+    font-weight: 700;
+  }
+  
+  .css-i2a3dw-MuiFormControlLabel-root .MuiFormControlLabel-label {
+    color: #001f4e;
+  }
+  
+  .wrap {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .button {
+    min-width: 250px;
+    min-height: 35px;
+    display: inline-flex;
+    /* font-family: 'Nunito', sans-serif; */
+    font-size: 22px;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 1.3px;
+    font-weight: 700;
+    color: #313133;
+    background: linear-gradient(90deg, #24407f, #4ba0c6);
+    background-size: 200% 200%;
+    border: none;
+    border-radius: 1000px !important;
+    box-shadow: 12px 12px 24px rgba(79, 209, 197, .64);
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    outline: none;
+    position: relative;
+    padding: 10px;
+    animation: gradientAnimation 3s ease infinite;
+  }
+  
+  @keyframes gradientAnimation {
+    0% {
+      background-position: 0% 50%;
+    }
+  
+    50% {
+      background-position: 100% 50%;
+    }
+  
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  .button:hover {
+    box-shadow: 16px 16px 32px rgba(79, 209, 197, .8);
+    transform: scale(1.03);
+    transition: transform 0.2s ease-in-out;
+}
+button.MuiButtonBase-root:hover {
+    /* box-shadow: 16px 16px 32px rgba(79, 209, 197, .8); */
+    transform: scale(1.03);
+    transition: transform 0.2s ease-in-out;
+}
+
+  .button::before {
+    content: '';
+    border-radius: 1000px;
+    min-width: calc(277px + 12px);
+    min-height: calc(40px + 9px);
+    border: 6px solid #2b6b94;
+    box-shadow: 0 0 60px rgb(42 111 152 / 48%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: all .3s ease-in-out 0s;
+  }
+  
+  .button:hover,
+  .button:focus {
+    color: #fff;
+    transform: translateY(-6px);
+  }
+  
+  .button:hover::before,
+  .button:focus::before {
+    opacity: 1;
+  }
+  
+  
+  .button::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+    border: 6px solid #1976d2;
+    position: absolute;
+    z-index: 1000;
+    top: 5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: ring 1.5s infinite;
+  }
+  
+  
+  .button:hover::after,
+  .button:focus::after {
+    animation: none;
+    display: none;
+  }
+  
+
+ 
+  
+  
+  a.MuiTypography-root.MuiTypography-body2.MuiLink-root.MuiLink-underlineAlways.css-xdjwf0-MuiTypography-root-MuiLink-root {
+    color: #001b4a;
+  }
+  
+  button.mb-3.ml-3.pt-3.pb-2.pl-3.pr-3.rounded-full.bg-gray-200.text-gray-800 {
+    position: relative;
+    top: 3px;
+  }
+  
+  
+  button.mb-3.ml-3.pt-3.pb-2.pl-3.pr-3.rounded-full.bg-gray-600 .dark .text-white {
+    position: relative;
+    top: 4px;
+  }
+  
+  .background {
+    background: linear-gradient(45deg, #444444, #666666);
+    /* Agar thoda shine effect chahiye toh aap yeh bhi add kar sakte hain */
+    background-blend-mode: overlay;
+    height: 100vh;
+    /* Full height for demonstration */
+  }
+  .css-13y79c5-MuiTypography-root {
+    margin: 0;
+    /* font-family: "Roboto","Helvetica","Arial",sans-serif; */
+    font-weight: 400;
+    font-size: 1.5rem;
+    line-height: 1.334;
+    font-weight: bold;
+    letter-spacing: 0em;
+    margin-bottom: 0.35em;
+  }
+  
+  .css-x4rozd-MuiPaper-root {
+    background-color: transparent !important;
+    color: rgba(0, 0, 0, 0.87);
+    -webkit-transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    border-radius: 4px;
+    box-shadow: var(--Paper-shadow);
+    background-image: var(--Paper-overlay);
+    padding: 16px;
+    box-shadow: 0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12);
+  }
+  
+  .bg-white {
+    --tw-bg-opacity: 1;
+    background-color: transparent;
+    /* box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset !important; */
+  }
+  
+  ul.pclr.text-gray-800 {
+    background-color: #fff;
+  }
+  
+  
+  ul.space-y-2.setp {
+    padding-top: 9px;
+    padding: 0 14px;
+    font-size: 16px;
+  }
+  
+  /* Receipt.css */
+  /* Payinsuc.css */
+  
+  /* Remove all borders */
+  .MuiTableCell-root {
+    border: none !important;
+  }
+  
+  /* Bottom border for input fields */
+  .MuiTextField-root {
+    border: none !important;
+    /* border-bottom: 2px solid #3f51b5 !important; */
+    background-color: transparent !important;
+  }
+  
+  /* Attractive button styles */
+  .MuiButton-root {
+    background: linear-gradient(45deg, #000000, #2196F3) !important;;
+    /* Primary color */
+    color: white !important;
+    border-radius: 20px !important;
+    /* Rounded corners */
+    padding: 10px 20px !important;
+    transition: background-color 0.3s ease !important;
+  }
+  
+  .MuiButton-root:hover {
+    background-color: #303f9f !important;
+    /* Darker shade on hover */
+  }
+  
+  /* Row color styles */
+  .lightred {
+    background-color: #ffcccc !important;
+    /* Light red */
+  }
+  
+  .green {
+    background-color: #ccffcc !important;
+    /* Light green */
+  }
+  
+  /* Adjust table container */
+  .MuiTableContainer-root {
+    border: none !important;
+    box-shadow: none !important;
+  }
+  
+  .css-15wwp11-MuiTableHead-root {
+    display: table-header-group;
+    border-bottom: 2px solid #000;
+  }
+  
+  .material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 21px;
+    background: linear-gradient(45deg, #000000, #2196F3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    padding-left: 10px;
+    /* display: inline-block; */
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  button.pt-3.pb-2.pl-3.pr-3.text-white.bg-gray-700.rounded-full {
+    background: linear-gradient(45deg, #000000, #2196F3)!important;
+  
+  }
+  .custom-rounded {
+    border-radius: 10px;
+  }
+  .pclr li a {
+    font-size: 15px;
+  }
+  p.clrred {
+    font-size: 12px;
+    color: red;
+  }
+  .gqrapi td:first-child {
+    border: 2px solid rgb(238, 238, 238);
+    font-size: 14px;
+    text-align: center;
+  }
+  .gqrapi p {
+    font-size: 16px;
+  }
+  .gqrapi pre {
+    font-size: 16px;
+  }
+  .sidebarstyle header.MuiPaper-root.MuiPaper-elevation.MuiPaper-elevation4.MuiAppBar-root.MuiAppBar-colorPrimary.MuiAppBar-positionStatic.css-5iifl-MuiPaper-root-MuiAppBar-root {
+    background: linear-gradient(45deg, #00000073, #2196f3a3) !important;
+    width: 100%;
+    border-radius: 1em !important;
+    box-sizing: border-box;
+    color:#fff;
+    -webkit-transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    box-shadow: var(--Paper-shadow);
+    font-weight:bold!important;
+}
+
+
+.MuiButton-root {
+  background: linear-gradient(45deg, #00000073, #2196f3a3) !important;
+  color: white !important;
+  font-weight: bold !important;
+  border-radius: 20px !important;
+  padding: 10px 20px !important;
+  transition: background-color 0.3s ease !important;
+}
+
+
+.table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+ th,
+ td {
+  border: 1px solid #ddd !important;
+  padding: 12px;
+  text-align: left;
+}
+
+thead {
+  background-color: #e0e0e0;
+}
+
+ tr:nth-child(even) {
+  background-color: #f2f2f2;
+  /* box-shadow: rgba(248, 247, 247, 0.35) 0px 5px 15px; */
+}
+
+
+.css-apqrd9-MuiTableBody-root {
+  display: table-row-group;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+p.MuiTypography-root.MuiTypography-body1.css-1edfpdg-MuiTypography-root {
+  font-weight: 700!important;
+  font-size: 21px !important;
+}
+h6.MuiTypography-root.MuiTypography-h6.css-8zgow4-MuiTypography-root {
+  font-weight: 600 !important;
+  font-size: 20px !important;
+}
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.clrchnge.css-1jihwhh-MuiPaper-root {
+  text-align: center !important;
+  font-weight: 700 !important;
+}
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.clrchnge.css-1jihwhh-MuiPaper-root {
+  text-align: center !important;
+  height:100% !important;
+  width:100% !important;
+}
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.clrchnge.css-gf5vub-MuiPaper-root {
+  text-align: center !important;
+}
+p.MuiTypography-root.MuiTypography-body1.css-1ub6n32-MuiTypography-root {
+  text-align: center !important;
+  font-size: 34px !important;
+}
+.MuiTypography-root.MuiTypography-h6.css-173147z-MuiTypography-root {
+  font-weight:700 !important;
+}
+
+
+/* icons */
+span.anticon.anticon-profile.ant-menu-item-icon {
+  color: #fe7a96;
+  font-weight: 700;
+  font-size: 23px;
+}
+element.style {
+  color: #18ceb3;
+  font-size: 23px;
+}
+span.anticon.anticon-wallet.ant-menu-item-icon {
+  font-size: 20px;
+  color: #17cfb3;
+}
+svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.ant-menu-item-icon.css-20bmp1-MuiSvgIcon-root {
+  color: #fe7296;
+  font-size: 22px;
+}
+span.anticon.anticon-file-protect.ant-menu-item-icon {
+  font-size: 20px;
+  color: #17cfb3;
+}
+span.anticon.anticon-setting.ant-menu-item-icon {
+  color: #fe7296;
+  font-size: 21px;
+  font-weight: bold;
+}
+
+.bg1 {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 10px 0px;
+  z-index: 1; /* Ensure content stays above the background */
+}
+
+.bg1::before {
+  content: "";
+  background-image: url("assets/images/bar-graph.png");
+  background-size: 50% auto; /* Reduce the width to 50%, keeping height auto */
+  background-position: center; /* Center the image horizontally */
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.07; /* Keep opacity fixed */
+  z-index: -1; /* Ensure the image stays behind the content */
+  display: block; /* Ensure it's always displayed */
+  transition: none; /* Prevent transitions from altering opacity */
+}
+
+.bg1:hover::before {
+  opacity: 0.1; /* Keep the opacity consistent on hover */
+  display: block; /* Ensure display stays consistent */
+}

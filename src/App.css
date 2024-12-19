@@ -1,0 +1,61 @@
+.ant-layout.ant-layout-has-sider.css-dev-only-do-not-override-vn1oyg {
+  position: fixed;
+  top: 0px;
+  height: 90vh;
+  width: 100%;
+}
+
+.demo-logo-vertical {
+  margin: 10px 0px;
+  transition: width 0.3s;
+}
+
+.demo-logo-vertical img {
+  width: 120px; /* Default width */
+  transition: width 0.3s;
+}
+
+.demo-logo-vertical.collapsed-logo img {
+  width:100%; /* Width when collapsed */
+}
+
+header span.anticon.anticon-user {
+  background-color: #fff;
+  border-radius: 50%;
+  border: 2px solid #000;
+  padding: 4px;
+  margin-right: 5px;
+}
+
+/* RechargeApiDocument.css */
+
+.recharge-api-document {
+  padding: 20px;
+  background-color: #f0f2f5; /* Light background color */
+  border-radius: 8px; /* Rounded corners */
+}
+
+.title {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333; /* Dark text color */
+}
+
+.custom-tabs .ant-tabs-card .ant-tabs-card-bar {
+  background: #1890ff; /* Primary color for tabs */
+  color: #fff; /* White text color for active tab */
+}
+
+.custom-tabs .ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab-active {
+  color: #fff; /* White text color for active tab */
+}
+
+.custom-card {
+  border-radius: 8px; /* Rounded corners for cards */
+  background-color: #ffffff; /* White background for card content */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+
+
