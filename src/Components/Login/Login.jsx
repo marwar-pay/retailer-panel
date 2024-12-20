@@ -17,9 +17,9 @@ import {
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import TwitterIcon from "@mui/icons-material/Twitter";
-import axios from "axios";
+
 import { useNavigate } from "react-router-dom";
-import { domainBase } from "../../helpingFile";
+
 import assetimg from "../../assets/images/Login.gif";
 import logo from "../../assets/images/logologin.png";
 import bg from "../../assets/images/bgimgmarwar.jpg";
@@ -57,7 +57,7 @@ const Login = () => {
           setOpenSnackbar(true);
    
           setTimeout(() => {
-            navigate("/dashboard");
+            navigate("/");
           }, 2000);
         } else {
           throw new Error("Access token or refresh token is missing.");

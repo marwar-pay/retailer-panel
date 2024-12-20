@@ -8,11 +8,13 @@ import {
   Typography,
   Grid,
   Alert,
+  Snackbar,
+  CircularProgress,
 } from "@mui/material";
 
 const generateRandomId = () => {
-    return Math.random().toString(36).slice(2, 22); // Generates a random 20-character ID
-  };
+  return Math.random().toString(36).slice(2, 22); // Generates a random 20-character ID
+};
 
 const PayoutGenerator = () => {
   const API_ENDPOINT = "apiUser/v1/userRoute/userInfo";
@@ -30,6 +32,8 @@ const PayoutGenerator = () => {
   });
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false); // To manage loader visibility
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // To manage Snackbar visibility
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,13 +42,17 @@ const PayoutGenerator = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start loading
     try {
-      const res = await apiPost("apiAdmin/v1/payout/generatePayOut", {...formData });
+      const res = await apiPost("apiAdmin/v1/payout/generatePayOut", { ...formData });
       setResponse(res.data);
       setError(null);
+      setSnackbarOpen(true); // Show success message
     } catch (err) {
       setError(err.response?.data || "An error occurred");
       setResponse(null);
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -152,10 +160,15 @@ const PayoutGenerator = () => {
           color="primary"
           fullWidth
           sx={{ mt: 3 }}
+          disabled={loading} // Disable button while loading
         >
           Generate Payout
         </Button>
       </form>
+
+      {loading && (
+        <CircularProgress sx={{ display: "block", margin: "20px auto" }} />
+      )}
 
       {response && (
         <Alert severity="success" sx={{ mt: 3 }}>
@@ -170,6 +183,13 @@ const PayoutGenerator = () => {
           <pre>{JSON.stringify(error, null, 2)}</pre>
         </Alert>
       )}
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={() => setSnackbarOpen(false)}
+        message="Payout successfully generated"
+      />
     </Container>
   );
 };

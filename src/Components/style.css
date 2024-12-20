@@ -171,7 +171,10 @@ font-size: 18px !important;
 .dark-mode .ant-menu .ant-menu-sub{
   background-color: #0e2337  !important;
 }
-.dark-mode .setdesigntofix{
+
+.dark-mode .setdesigntofix {
   background-color: #0e2337 !important;
-  margin-top:-30px !important;
+
+  top: -42px;
+  padding: 10px 10px;
 }

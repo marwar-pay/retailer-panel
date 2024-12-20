@@ -51,7 +51,7 @@ const CreateTicket = () => {
     paddingTop:'20px',
     overflow:'hidden' ,     
     backgroundColor: 'white', 
-  }}>
+  }} className='setdesigntofix'>
      <Grid container alignItems="center" sx={{ mb: 2 , fontWeight:'bold'}}>
         <Grid item xs>
           <Typography variant="h5" gutterBottom>Create Support Ticket</Typography>

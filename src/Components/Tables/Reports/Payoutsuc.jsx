@@ -155,7 +155,7 @@ const Payinsuc = () => {
     top: 0,             
     zIndex: 1000,       
     backgroundColor: 'white', 
-  }}>
+  }} className='setdesigntofix'>
       <Grid container alignItems="center" sx={{ mb: 2 }}>
         <Grid item xs>
           <Typography variant="h5" gutterBottom>PayOut Success Information</Typography>
