@@ -144,7 +144,7 @@ const Payoutgen = () => {
     top: isSmallScreen ? 'auto' : 0,             
     zIndex: 1000,  
     overflow:'hidden' ,      
-    // backgroundColor: 'white', 
+    backgroundColor: 'white', 
       }} className="setdesigntofix">
 
       <Grid container alignItems="center" sx={{ mb: 2 }}>
