@@ -11,11 +11,12 @@ import {
   TextField,
   Grid,
   Button,
-  Pagination
+  Pagination,
+  useMediaQuery
 } from '@mui/material';
-import axios from 'axios';
-import { accessConstent, domainBase } from '../../../helpingFile';
+
 import { saveAs } from 'file-saver';
+import { apiPost } from '../../../api/apiMethods';
 
 const Payinsuc = () => {
   const [qrData, setQrData] = useState([]);
@@ -26,17 +27,14 @@ const Payinsuc = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [viewAll, setViewAll] = useState(false); // Add state for "View All" functionality
   const itemsPerPage = 10;
-  const API_ENDPOINT = `${domainBase}apiUser/v1/payin/getAllPayInSuccess`;
-  const token = localStorage.getItem(accessConstent);
+  const API_ENDPOINT = `apiUser/v1/payin/getAllPayInSuccess`;
+  const isSmallScreen = useMediaQuery('(max-width:800px)');
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(API_ENDPOINT, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await apiPost(API_ENDPOINT);
         if (Array.isArray(response.data.data)) {
           setQrData(response.data.data);
           setFilteredData(response.data.data);
@@ -145,9 +143,9 @@ const Payinsuc = () => {
       <Grid
         sx={{
           mb: 3,
-          position: 'sticky',
-          paddingTop: '20px',
-          top: 0,
+          position: isSmallScreen ? 'relative' : 'sticky', // Remove sticky for small screens
+          top: isSmallScreen ? 'auto' : 0,
+    
           zIndex: 1000,
           backgroundColor: 'white',
         }} className='setdesigntofix'

@@ -159,7 +159,7 @@ function Sidebar() {
 
   return (
     <>
-      <Layout style={{ height: '100vh', background: 'transparent' }}>
+      <Layout style={{ height: '100vh', background: 'transparent',overflowX:'hidden', position:'sticky',overflowY:'hidden !important' }}>
        
 <Sider
   trigger={null}

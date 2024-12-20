@@ -18,7 +18,8 @@ import {
   DialogTitle,
   DialogContent,
   IconButton,
-  DialogActions
+  DialogActions,
+  useMediaQuery
 } from '@mui/material';
 
 
@@ -29,6 +30,7 @@ import { apiGet } from '../../../api/apiMethods';
 const Mywallet = () => {
   const [ewalletData, setEwalletData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+  const isSmallScreen = useMediaQuery('(max-width:800px)');
 
   // Filter and Pagination state
   const [searchAmount, setSearchAmount] = useState('');
@@ -153,8 +155,8 @@ const Mywallet = () => {
     <>
       <Grid sx={{
         mb: 3,
-        position: 'sticky',
-        top: 0,             
+        position: isSmallScreen ? 'relative' : 'sticky', // Remove sticky for small screens
+        top: isSmallScreen ? 'auto' : 0,             
         zIndex: 1000, 
         paddingTop: '20px',
         overflow: 'hidden',     

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Button, Grid, Pagination } from '@mui/material';
+import { Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Button, Grid, Pagination, useMediaQuery } from '@mui/material';
 import { saveAs } from 'file-saver';
 import { apiGet } from '../../../api/apiMethods';
 
@@ -14,6 +14,7 @@ const Payoutgen = () => {
   const [viewAll, setViewAll] = useState(false);
   const itemsPerPage = 10;
   const API_ENDPOINT = `apiUser/v1/payout/getAllPayOutGenerated`;
+  const isSmallScreen = useMediaQuery('(max-width:800px)');
 
 
   useEffect(() => {
@@ -139,8 +140,8 @@ const Payoutgen = () => {
        <Grid sx={{
     mb: 3,
     paddingTop:'20px',
-    position: 'sticky', 
-    top: 0,             
+    position: isSmallScreen ? 'relative' : 'sticky', // Remove sticky for small screens
+    top: isSmallScreen ? 'auto' : 0,             
     zIndex: 1000,  
     overflow:'hidden' ,      
     // backgroundColor: 'white', 

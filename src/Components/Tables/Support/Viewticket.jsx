@@ -17,7 +17,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  MenuItem
+  MenuItem,
+  useMediaQuery
 } from '@mui/material';
 import { Visibility as VisibilityIcon } from '@mui/icons-material';
 
@@ -37,7 +38,8 @@ const ViewTicket = () => {
   const [page, setPage] = useState(1);
   const [isEditing, setIsEditing] = useState(false);
   const itemsPerPage = 10;
- 
+  const isSmallScreen = useMediaQuery('(max-width:800px)');
+
   const API_ENDPOINT = `apiUser/v1/support/getSupportTicket`;
 
   useEffect(() => {
@@ -148,8 +150,8 @@ const ViewTicket = () => {
     <>
  <Grid sx={{
     mb: 3,
-    position: 'sticky', 
-    top: 0,             
+    position: isSmallScreen ? 'relative' : 'sticky', // Remove sticky for small screens
+    top: isSmallScreen ? 'auto' : 0,            
     zIndex: 1000, 
     paddingTop:'20px',
     overflow:'hidden' ,     

@@ -11,7 +11,8 @@ import {
   TextField,
   Grid,
   Button,
-  Pagination
+  Pagination,
+  useMediaQuery
 } from '@mui/material';
 
 
@@ -31,6 +32,7 @@ const Payinsuc = () => {
 
   const [viewAll, setViewAll] = useState(false);
 
+  const isSmallScreen = useMediaQuery('(max-width:800px)');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -151,8 +153,8 @@ const Payinsuc = () => {
     <Grid sx={{
     mb: 3,
     paddingTop:'20px',
-    position: 'sticky', 
-    top: 0,             
+    position: isSmallScreen ? 'relative' : 'sticky', // Remove sticky for small screens
+    top: isSmallScreen ? 'auto' : 0,             
     zIndex: 1000,       
     backgroundColor: 'white', 
   }} className='setdesigntofix'>
