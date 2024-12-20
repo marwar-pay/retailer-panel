@@ -23,8 +23,9 @@ import { domainBase } from "../../helpingFile";
 import assetimg from "../../assets/images/Login.gif";
 import logo from "../../assets/images/logologin.png";
 import bg from "../../assets/images/bgimgmarwar.jpg";
+import { apiPost } from "../../api/apiMethods";
 
-const API_ENDPOINT = `${domainBase}apiUser/v1/userRoute/login`;
+const API_ENDPOINT = `apiUser/v1/userRoute/login`;
 
 const Login = () => {
   const [userName, setUsername] = useState("");
@@ -38,28 +39,23 @@ const Login = () => {
     event.preventDefault();
   
     try {
-      const response = await axios.post(API_ENDPOINT, {
+      const response = await apiPost(API_ENDPOINT, {
         userName,
         password,
       });
   
       const { accessToken, refreshToken, user } = response.data.data;
-  
-      // Check if the user is a Retailer
+   
       if (user.memberType === "Retailer") {
-        if (accessToken && refreshToken) {
-          // Save tokens to localStorage
+        if (accessToken && refreshToken) { 
           localStorage.setItem("accessToken", accessToken);
-          localStorage.setItem("refreshToken", refreshToken);
-  
-          // Set expiration time for token
+          localStorage.setItem("refreshToken", refreshToken); 
           const expirationTime = new Date().getTime() + (rememberMe ? 24 : 1) * 60 * 60 * 1000;
           localStorage.setItem("expirationTime", expirationTime);
   
           setSnackbarMessage("Login successful!");
           setOpenSnackbar(true);
-  
-          // Redirect to the dashboard
+   
           setTimeout(() => {
             navigate("/dashboard");
           }, 2000);
