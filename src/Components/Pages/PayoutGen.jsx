@@ -12,11 +12,25 @@ import {
   CircularProgress,
 } from "@mui/material";
 
+
 const generateRandomId = () => {
-  return Math.random().toString(36).slice(2, 22); // Generates a random 20-character ID
+  const length = Math.floor(Math.random() * (20 - 13 + 1)) + 13; // Random length between 13 and 20
+  let randomString = '';
+  
+  // Generate a long enough random string
+  while (randomString.length < length) {
+    randomString += Math.random().toString(36).slice(2); // Append random characters
+  }
+
+  return randomString.slice(0, length); // Trim to the desired length
 };
 
+
+
+
+
 const PayoutGenerator = () => {
+ 
   const API_ENDPOINT = "apiUser/v1/userRoute/userInfo";
   const [userData, setUserData] = useState(null);
   const [formData, setFormData] = useState({
