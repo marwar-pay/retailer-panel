@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Paper,
   Typography,
@@ -15,129 +15,98 @@ import {
   useMediaQuery
 } from '@mui/material';
 
-import { saveAs } from 'file-saver';
-import { apiPost } from '../../../api/apiMethods';
+
+import { apiGet } from '../../../api/apiMethods';
 
 const Payinsuc = () => {
   const [qrData, setQrData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
-  const [searchInput, setSearchInput] = useState('');
-  const [searchStartDate, setSearchStartDate] = useState('');
-  const [searchEndDate, setSearchEndDate] = useState('');
+  const [searchInput, setSearchInput] = useState("");
+  const [searchStartDate, setSearchStartDate] = useState("");
+  const [searchEndDate, setSearchEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [viewAll, setViewAll] = useState(false); // Add state for "View All" functionality
-  const itemsPerPage = 10;
-  const API_ENDPOINT = `apiUser/v1/payin/getAllPayInSuccess`;
-  const isSmallScreen = useMediaQuery('(max-width:800px)');
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [totalDocs, setTotalDocs] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [noData, setNoData] = useState(false); // Flag to track empty results
+  const isSmallScreen = useMediaQuery("(max-width:800px)");
+  const isFirstRender = useRef(true);
+  const API_ENDPOINT = "apiUser/v1/payin/getAllPayInSuccess";
+  const [isLoading, setIsLoading] = useState(true);
 
+  const fetchData = async (exportCSV = "false") => {
+    try {
+      // Prevent API call if only one date is entered
+      if ((searchStartDate && !searchEndDate) || (!searchStartDate && searchEndDate)) return;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await apiPost(API_ENDPOINT);
-        if (Array.isArray(response.data.data)) {
-          setQrData(response.data.data);
-          setFilteredData(response.data.data);
-        } else {
-          console.error('Data is not an array:', response.data.data);
-        }
-      } catch (error) {
-        console.error('There was an error fetching the QR data!', error);
+      const queryParams = new URLSearchParams({
+        page: currentPage,
+        limit: itemsPerPage,
+        keyword: searchInput,
+        startDate: searchStartDate || "",
+        endDate: searchEndDate || "",
+        export: exportCSV,
+      });
+
+      const response = await apiGet(`${API_ENDPOINT}?${queryParams}`);
+
+      if (exportCSV === "true") {
+        const blob = new Blob([response.data], { type: "text/csv" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `payin-success${searchStartDate}-${searchEndDate}.csv`;
+        link.click();
+        link.remove();
+        return;
       }
-    };
 
-    fetchData();
-  }, []);
-
-  const handleFilter = () => {
-    let filtered = qrData.filter((item) => {
-      const matchesName = item.name?.toLowerCase().includes(searchInput.toLowerCase());
-      const matchesTxnID = item.trxId?.toLowerCase().includes(searchInput.toLowerCase());
-
-      const trxDate = new Date(item.createdAt);
-      trxDate.setHours(0, 0, 0, 0);
-
-      const startDate = searchStartDate ? new Date(searchStartDate) : null;
-      const endDate = searchEndDate ? new Date(searchEndDate) : null;
-
-      if (startDate) startDate.setHours(0, 0, 0, 0);
-      if (endDate) endDate.setHours(23, 59, 59, 999);
-
-      const isStartDateOnly = startDate && !endDate && trxDate.getTime() === startDate.getTime();
-      const isWithinDateRange =
-        startDate && endDate && trxDate >= startDate && trxDate <= endDate;
-
-      return (
-        (matchesName || matchesTxnID) &&
-        (!startDate && !endDate || isStartDateOnly || isWithinDateRange)
-      );
-    });
-
-    setFilteredData(filtered);
-    setCurrentPage(1);
+      if (Array.isArray(response.data.data) && response.data.data.length > 0) {
+        setQrData(response.data.data);
+        setTotalDocs(response.data.totalDocs);
+        setTotalPages(Math.ceil(response.data.totalDocs / itemsPerPage));
+        setNoData(false); // Data is available
+        setIsLoading(false);
+      } else {
+        setQrData([]);
+        setTotalDocs(0);
+        setTotalPages(1);
+        setNoData(true); // No data found
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error("There was an error fetching the QR data!", error);
+    }
   };
 
+  // Fetch data when filters or pagination changes
   useEffect(() => {
-    handleFilter();
-  }, [searchInput, searchStartDate, searchEndDate]);
+    fetchData();
+  }, [currentPage, itemsPerPage, searchStartDate, searchEndDate]);
 
+  // Debounced search to reduce API calls
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    const timer = setTimeout(() => {
+      fetchData();
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
+
+  // Handle Reset
   const handleReset = () => {
-    setSearchInput('');
-    setSearchStartDate('');
-    setSearchEndDate('');
-    setFilteredData(qrData);
+    setSearchInput("");
+    setSearchStartDate("");
+    setSearchEndDate("");
     setCurrentPage(1);
-    setViewAll(false); // Reset "View All" mode
+    setNoData(false);
   };
 
+  // Handle Pagination Change
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
-
-  const toggleViewAll = () => {
-    setViewAll((prev) => !prev);
-    setCurrentPage(1);
-  };
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = viewAll
-    ? filteredData
-    : Array.isArray(filteredData)
-    ? filteredData.slice(indexOfFirstItem, indexOfLastItem)
-    : [];
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const handleExportData = () => {
-    const dateFormatter = new Intl.DateTimeFormat('en-GB', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false, // Set to true if you want 12-hour format
-    });
-  
-    const csvRows = [
-      ['#', 'Name','TxnID','Amount', 'Charge Amount', 'Final Amount', 'VPA ID','RRN','Status','Date'], // Header row
-      ...filteredData.map((item, index) => [
-        index + 1,
-        item.payerName || 'NA',
-        item.trxId || 'NA',
-        item.amount || 'NA',
-        item.chargeAmount || 'NA',
-        item.finalAmount || 'NA',
-        item.vpaId || 'NA',
-        item.bankRRN || 'NA',
-        item.isSuccess || 'NA',
-        dateFormatter.format(new Date(item.createdAt)),
-      ]),
-    ];
-  
-    const csvContent = csvRows.map((row) => row.join(',')).join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    saveAs(blob, 'Payin_SuccessData.csv');
-  };
-
   return (
     <>
       <Grid
@@ -145,7 +114,6 @@ const Payinsuc = () => {
           mb: 3,
           position: isSmallScreen ? 'relative' : 'sticky', // Remove sticky for small screens
           top: isSmallScreen ? 'auto' : 0,
-    
           zIndex: 1000,
           backgroundColor: 'white',
         }} className='setdesigntofix'
@@ -156,15 +124,15 @@ const Payinsuc = () => {
               Payin Success Information
             </Typography>
           </Grid>
-          <Button variant="contained" onClick={handleExportData}>
-            Export 
+          <Button variant="contained" onClick={() => fetchData("true")}>
+            Export
           </Button>
         </Grid>
 
         <Grid container spacing={3} alignItems="center" sx={{ mb: 3 }}>
           <Grid item xs={12} md={3}>
             <TextField
-              label="Search by Name or TxnID"
+              label="Search by TxnID"
               variant="outlined"
               fullWidth
               value={searchInput}
@@ -199,16 +167,19 @@ const Payinsuc = () => {
                 Reset
               </Button>
             </Grid>
-            <Grid item xs={6}>
+            {/* <Grid item xs={6}>
               <Button variant="contained" fullWidth onClick={toggleViewAll}>
                 {viewAll ? 'Paginate' : 'View All'}
               </Button>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Grid>
       </Grid>
 
-      <TableContainer component={Paper} sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', p: 1 }}>
+      <TableContainer
+        component={Paper}
+        sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', p: 1 }}
+      >
         <Table sx={{ borderCollapse: 'collapse' }}>
           <TableHead>
             <TableRow>
@@ -224,23 +195,34 @@ const Payinsuc = () => {
               <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Date</strong></TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {currentItems.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={12} align="center">No data available.</TableCell>
-              </TableRow>
-            ) : (
-              currentItems.map((qr, index) => (
+    
+           <TableBody>
+           {isLoading ? (
+    <TableRow>
+      <TableCell colSpan={6} align="center">
+        Loading...
+      </TableCell>
+    </TableRow>
+  ) : noData ? (
+    <TableRow>
+      <TableCell colSpan={6} align="center">
+        No data available.
+      </TableCell>
+    </TableRow>
+  ) : (
+              qrData.map((qr, index) => (
                 <TableRow key={qr._id}>
                   <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{index + 1 + (currentPage - 1) * itemsPerPage}</TableCell>
-                  <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{qr.payerName || 'NA'}</TableCell>
-                  <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{qr.trxId || 'NA'}</TableCell>
-                  <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', align: 'center' }}>{Number(qr.amount || 'NA').toFixed(2)}</TableCell>
-                  <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', align: 'center' }}>{Number(qr.chargeAmount || 'NA').toFixed(2)}</TableCell>
-                  <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', align: 'center' }}>{Number(qr.finalAmount || 'NA').toFixed(2)}</TableCell>
-                  <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{qr.vpaId || 'NA'}</TableCell>
-                  <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{qr.bankRRN || 'NA'}</TableCell>
-                  <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', color: qr.isSuccess === 'Success' ? 'green' : 'red' }}>{qr.isSuccess || 'NA'}</TableCell>
+                  <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{qr.payerName || "NA"}</TableCell>
+                  <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{qr.trxId || "NA"}</TableCell>
+                  <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{Number(qr.amount || "NA").toFixed(2)}</TableCell>
+                  <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{Number(qr.chargeAmount || "NA").toFixed(2)}</TableCell>
+                  <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{Number(qr.finalAmount || "NA").toFixed(2)}</TableCell>
+                  <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{qr.vpaId || "NA"}</TableCell>
+                  <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{qr.bankRRN || "NA"}</TableCell>
+                  <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }} style={{ color: qr.isSuccess === "Success" ? "green" : "red" }}>
+                    {qr.isSuccess || "NA"}
+                  </TableCell>
                   <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{new Date(qr.createdAt).toLocaleString()}</TableCell>
                 </TableRow>
               ))
@@ -249,17 +231,9 @@ const Payinsuc = () => {
         </Table>
       </TableContainer>
 
-      {!viewAll && (
-        <Grid container justifyContent="center" sx={{ mt: 2 }}>
-          <Pagination
-            count={totalPages}
-            page={currentPage}
-            onChange={handlePageChange}
-            variant="outlined"
-            shape="rounded"
-          />
-        </Grid>
-      )}
+      <Grid container justifyContent="center" sx={{ mt: 2 }}>
+        <Pagination count={totalPages} page={currentPage} onChange={handlePageChange} variant="outlined" shape="rounded" />
+      </Grid>
     </>
   );
 };
