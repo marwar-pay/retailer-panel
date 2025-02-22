@@ -27,7 +27,18 @@ const { Header, Sider, Content } = Layout;
 function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const [selectedItem, setSelectedItem] = useState('1');
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  // const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    // Get theme from localStorage, default to false (light mode)
+    return localStorage.getItem('theme') === 'dark';
+  });
+  useEffect(() => {
+    // Apply dark mode class to body
+    document.body.classList.toggle('dark-mode', isDarkMode);
+    
+    // Save theme preference to localStorage
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
   const {
     token: { borderRadiusLG },
   } = theme.useToken();
