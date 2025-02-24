@@ -26,7 +26,7 @@ import { Visibility as VisibilityIcon } from '@mui/icons-material';
 // import { saveAs } from 'file-saver';
 import { apiGet } from '../../../api/apiMethods';
 
-const Mywallet = () => {
+const UPIToEwallet = () => {
   const [ewalletData, setEwalletData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const isSmallScreen = useMediaQuery('(max-width:800px)');
@@ -40,7 +40,7 @@ const Mywallet = () => {
 
   const [totalDocs, setTotalDocs] = useState(Number);
   const [totalPages, setTotalPages] = useState(Number);
-  const API_ENDPOINT = `apiUser/v1/wallet/eWalletTrx`;
+  const API_ENDPOINT = `apiUser/v1/wallet/upiToEwalletTrx`;
   const [openModal, setOpenModal] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState(null);
   // const [noData, setNoData] = useState(false);
@@ -57,7 +57,7 @@ const Mywallet = () => {
         const blob = new Blob([response.data], { type: 'text/csv' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = `E-wallet${searchStartDate}-${searchEndDate}.csv`;
+        link.download = `upi-to-ewallet${searchStartDate}-${searchEndDate}.csv`;
         link.click();
         link.remove();
         return;
@@ -132,7 +132,7 @@ const totalTransactions = ewalletData.length;
       }} className='setdesigntofix'>
         <Grid container alignItems="center" sx={{ mb: 2 }}>
           <Grid item xs>
-            <Typography variant="h4" gutterBottom>E-Wallet Transactions</Typography>
+            <Typography variant="h4" gutterBottom>UPI to E-Wallet Transactions</Typography>
           </Grid>
           <Button variant="contained"onClick={() => fetchData("true")}>
             Export 
@@ -330,4 +330,4 @@ const totalTransactions = ewalletData.length;
   );
 };
 
-export default Mywallet;
+export default UPIToEwallet;

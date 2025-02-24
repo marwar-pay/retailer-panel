@@ -30,24 +30,16 @@ const Payingen = () => {
   const [searchStartDate, setSearchStartDate] = useState('');
   const [searchEndDate, setSearchEndDate] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [viewAll, setViewAll] = useState(false);
+  // const [viewAll, setViewAll] = useState(false);
   const [noData, setNoData] = useState(false);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const itemsPerPage = 10;
   const [totalDocs, setTotalDocs] = useState(Number);
   const [totalPages, setTotalPages] = useState(Number);
   const API_ENDPOINT = `apiUser/v1/payin/getAllQrGenerated`;
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
-//   function isWithinOneMonth(date1, date2) {
-//     const ONE_MONTH = 30 * 24 * 60 * 60 * 1000; // Approximate one month in milliseconds
-//     const diff = Math.abs(new Date(date1) - new Date(date2));
-//     return diff <= ONE_MONTH;
-// }
 
-// Example usage:
-// console.log(isWithinOneMonth("2024-01-01", "2024-02-01")); // true
-// console.log(isWithinOneMonth("2024-01-01", "2024-03-05")); // false
 
   
   const fetchData = async (exportCSV = "false") => {
@@ -59,10 +51,7 @@ const Payingen = () => {
         return;
       }
 
-      // if (exportCSV === "true" && !isWithinOneMonth(searchStartDate, searchEndDate)) {
-      //   alert("more than a month")
-      //   return;
-      // }
+  
       
       if ((searchStartDate && !searchEndDate) || (!searchStartDate && searchEndDate)) return;
 
@@ -139,7 +128,7 @@ const Payingen = () => {
     setSearchEndDate('');
     // setFilteredData(qrData);
     setCurrentPage(1);
-    setViewAll(false);
+    // setViewAll(false);
   };
 
   const handlePageChange = (event, value) => {
@@ -288,17 +277,9 @@ const Payingen = () => {
 
         </Table>
       </TableContainer>
-      {!viewAll && (
-        <Grid container justifyContent="center" sx={{ mt: 2 }}>
-          <Pagination
-            count={totalPages}
-            page={currentPage}
-            onChange={handlePageChange}
-            variant="outlined"
-            shape="rounded"
-          />
-        </Grid>
-      )}
+      <Grid container justifyContent="center" sx={{ mt: 2 }}>
+        <Pagination count={totalPages} page={currentPage} onChange={handlePageChange} variant="outlined" shape="rounded" />
+      </Grid>
        <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
           <Alert onClose={handleCloseSnackbar} severity={snackbarMessage.includes("failed") ? "error" : "success"} sx={{ width: '100%' }}>
             {snackbarMessage}

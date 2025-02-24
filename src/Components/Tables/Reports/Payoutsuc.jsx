@@ -21,12 +21,12 @@ const PayoutSuccess = () => {
   const isFirstRender = useRef(true);
 
   const [qrData, setQrData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
+ 
   const [searchInput, setSearchInput] = useState('');
   const [searchStartDate, setSearchStartDate] = useState('');
   const [searchEndDate, setSearchEndDate] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const itemsPerPage = 10;
   const [totalDocs, setTotalDocs] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const API_ENDPOINT = `apiUser/v1/payout/getAllPayOutSuccess`;
@@ -53,21 +53,24 @@ const PayoutSuccess = () => {
       
       const data = Array.isArray(response.data.data) ? response.data.data : [];
       setQrData(data);
-      setFilteredData(data);
+     
       setTotalDocs(response.data.totalDocs || 0);
       setTotalPages(Math.ceil((response.data.totalDocs || 0) / itemsPerPage));
       setIsLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error);
       setQrData([]);
-      setFilteredData([]);
+     
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
     fetchData();
-  }, [currentPage, itemsPerPage, searchStartDate, searchEndDate]);
+    const totalPages = Math.ceil(totalDocs / itemsPerPage)
+    setTotalPages(totalPages);
+  }, [currentPage, itemsPerPage, searchStartDate, searchEndDate,totalDocs]);
+  
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -88,6 +91,15 @@ const PayoutSuccess = () => {
 
   return (
     <>
+     <Grid
+        sx={{
+          mb: 3,
+          position: isSmallScreen ? 'relative' : 'sticky', // Remove sticky for small screens
+          top: isSmallScreen ? 'auto' : 0,
+          zIndex: 1000,
+          backgroundColor: 'white',
+        }} className='setdesigntofix'
+      >
       <Grid sx={{ mb: 3, paddingTop: '20px', backgroundColor: 'white' }}>
         <Grid container alignItems="center" sx={{ mb: 2 }}>
           <Grid item xs>
@@ -111,7 +123,7 @@ const PayoutSuccess = () => {
           </Grid>
         </Grid>
       </Grid>
-
+</Grid>
       <TableContainer
         component={Paper}
         sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', p: 1 }}
@@ -136,14 +148,14 @@ const PayoutSuccess = () => {
         Loading...
       </TableCell>
     </TableRow>
-  ) : filteredData.length === 0 ? (
+  ) : qrData.length === 0 ? (
     <TableRow>
       <TableCell colSpan={6} align="center">
         No data available.
       </TableCell>
     </TableRow>
   ) : (
-              filteredData.map((qr, index) => (
+    qrData.map((qr, index) => (
                 <TableRow key={qr._id}>
                   <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{index + 1 + (currentPage - 1) * itemsPerPage}</TableCell>
                   <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{qr.trxId || 'NA'}</TableCell>

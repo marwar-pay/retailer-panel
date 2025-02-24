@@ -24,7 +24,7 @@ const Payinsuc = () => {
   const [searchStartDate, setSearchStartDate] = useState("");
   const [searchEndDate, setSearchEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const itemsPerPage = 10;
   const [totalDocs, setTotalDocs] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [noData, setNoData] = useState(false); // Flag to track empty results
@@ -77,10 +77,13 @@ const Payinsuc = () => {
     }
   };
 
+
   // Fetch data when filters or pagination changes
   useEffect(() => {
     fetchData();
-  }, [currentPage, itemsPerPage, searchStartDate, searchEndDate]);
+    const totalPages = Math.ceil(totalDocs / itemsPerPage)
+    setTotalPages(totalPages);
+  }, [currentPage, itemsPerPage, searchStartDate, searchEndDate,totalDocs]);
 
   // Debounced search to reduce API calls
   useEffect(() => {

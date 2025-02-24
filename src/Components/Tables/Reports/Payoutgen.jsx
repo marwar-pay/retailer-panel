@@ -13,8 +13,8 @@ const Payoutgen = () => {
   const [searchStartDate, setSearchStartDate] = useState('');
   const [searchEndDate, setSearchEndDate] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [viewAll, setViewAll] = useState(false);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  const itemsPerPage = 10;
   const [totalDocs, setTotalDocs] = useState(Number);
   const [totalPages, setTotalPages] = useState(Number);
   const API_ENDPOINT = `apiUser/v1/payout/getAllPayOutGenerated`;
@@ -60,7 +60,9 @@ const Payoutgen = () => {
 
   useEffect(() => {
     fetchData();
-  }, [currentPage, itemsPerPage, searchStartDate, searchEndDate]);
+    const totalPages = Math.ceil(totalDocs / itemsPerPage)
+    setTotalPages(totalPages);
+  }, [currentPage, itemsPerPage, searchStartDate, searchEndDate,totalDocs]);
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -75,10 +77,7 @@ const Payoutgen = () => {
     return () => clearTimeout(timer);
   }, [searchInput]);
 
-  useEffect(() => {
-    const totalPages = Math.ceil(totalDocs / itemsPerPage)
-    setTotalPages(totalPages);
-  }, [itemsPerPage, totalDocs])
+
 
 
 
@@ -89,8 +88,7 @@ const Payoutgen = () => {
     setSearchEndDate(''); // Reset end date
     setFilteredData(payoutData);
     setCurrentPage(1); // Reset to first page
-    setViewAll(false);
-
+   
   };
 
   const handlePageChange = (event, value) => {
@@ -217,18 +215,9 @@ const Payoutgen = () => {
             </TableBody>
           </Table>
         </TableContainer>
-
-        {!viewAll && (
-          <Grid container justifyContent="center" sx={{ mt: 2 }}>
-            <Pagination
-              count={totalPages}
-              page={currentPage}
-              onChange={handlePageChange}
-              variant="outlined"
-              shape="rounded"
-            />
-          </Grid>
-        )}
+        <Grid container justifyContent="center" sx={{ mt: 2 }}>
+        <Pagination count={totalPages} page={currentPage} onChange={handlePageChange} variant="outlined" shape="rounded" />
+      </Grid>
       </div>
 
     </div>
