@@ -5,7 +5,7 @@ import {
   UserOutlined,
   ProfileOutlined,
   WalletOutlined,
-  FileProtectOutlined,
+  // FileProtectOutlined,
   SettingOutlined,
   SunOutlined,
   MoonOutlined,
@@ -44,7 +44,7 @@ function Sidebar() {
   } = theme.useToken();
   const [userData, setUserData] = useState({});
   const navigate = useNavigate();
-  const token = localStorage.getItem(accessConstent);
+  // const token = localStorage.getItem(accessConstent);
 
   const handleLogout = async () => {
     try {
