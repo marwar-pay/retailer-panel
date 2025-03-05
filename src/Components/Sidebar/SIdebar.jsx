@@ -83,7 +83,7 @@ function Sidebar() {
       .catch(error => {
         console.error('There was an error fetching the user data!', error);
       });
-  }, [isDarkMode, navigate]);
+  }, [isDarkMode]);
 
   const userInitial = getUserInitials(userData.fullName || '');
 

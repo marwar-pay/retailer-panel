@@ -22,6 +22,23 @@ const Payoutgen = () => {
   const [isLoading, setIsLoading] = useState(true);
   const fetchData = async (exportCSV = "false") => {
     try {
+
+      if (exportCSV === "true" && (!searchStartDate || !searchEndDate)) {
+
+        alert("choose a date")
+        return;
+      }
+      const start = new Date(searchStartDate);
+      const end = new Date(searchEndDate);
+      const diffTime = Math.abs(end - start);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
+  
+      // Restrict export to 15 days only
+      if (exportCSV === "true" && diffDays >= 10) {
+        alert("You can only export data for a maximum of 10 days.");
+        return;
+      }
+
       if ((searchStartDate && !searchEndDate) || (!searchStartDate && searchEndDate)) return;
       const response = await apiGet(`${API_ENDPOINT}?page=${currentPage}&limit=${itemsPerPage}&keyword=${searchInput}&startDate=${searchStartDate}&endDate=${searchEndDate}&export=${exportCSV}`);
   
@@ -38,6 +55,8 @@ const Payoutgen = () => {
       // Ensure response.data.data is an array, or fall back to an empty array
       const data = Array.isArray(response.data.data) ? response.data.data : [];
       
+
+      
       if (data.length === 0) {
         setPayoutData([]);
         setFilteredData([]);
@@ -47,7 +66,7 @@ const Payoutgen = () => {
         setFilteredData(data);
         setIsLoading(false);
       }
-  
+      setTotalPages(Math.ceil(response.data.totalDocs / itemsPerPage));
       setTotalDocs(response.data.totalDocs || 0);
     } catch (error) {
       console.error('There was an error fetching the payout data!', error);
@@ -58,11 +77,16 @@ const Payoutgen = () => {
   };
   
 
+  // useEffect(() => {
+  //   fetchData();
+  //   const totalPages = Math.ceil(totalDocs / itemsPerPage)
+  //   setTotalPages(totalPages);
+  // }, [currentPage, itemsPerPage, searchStartDate, searchEndDate,totalDocs]);
   useEffect(() => {
     fetchData();
-    const totalPages = Math.ceil(totalDocs / itemsPerPage)
+    const totalPages = Math.ceil(totalDocs / itemsPerPage);
     setTotalPages(totalPages);
-  }, [currentPage, itemsPerPage, searchStartDate, searchEndDate,totalDocs]);
+  }, [currentPage, itemsPerPage, searchStartDate, searchEndDate]);
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -174,7 +198,9 @@ const Payoutgen = () => {
                 <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>#</strong></TableCell>
                 <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Name</strong></TableCell>
                 <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>TxnID</strong></TableCell>
+              
                 <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Amount</strong></TableCell>
+                <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Charges</strong></TableCell>
                 <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Account No.</strong></TableCell>
                 <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>IFSC Code</strong></TableCell>
                 <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Status</strong></TableCell>
@@ -202,6 +228,7 @@ const Payoutgen = () => {
                     <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{payout.accountHolderName || 'NA'}</TableCell>
                     <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{payout.trxId || 'NA'}</TableCell>
                     <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{Number(payout.amount || 'NA').toFixed(2)}</TableCell>
+                    <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{Number(payout.gatwayCharge || 'NA').toFixed(2)}</TableCell>
                     <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{payout.accountNumber || 'NA'}</TableCell>
                     <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{payout.ifscCode || 'NA'}</TableCell>
                     <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', color: payout.isSuccess === 'Success' ? 'green' : 'red' }}>{payout.isSuccess || 'NA'}</TableCell>
