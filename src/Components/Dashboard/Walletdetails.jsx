@@ -17,7 +17,8 @@ const WalletDetails = () => {
   const fetchUpiWalletData = async () => {
     try {
       const response = await apiGet(API_ENDPOINT_UPI);
-
+      localStorage.setItem("memberId", response.data?.data?.memberId)
+      localStorage.setItem("fullName", response.data?.data?.fullName)
       const { EwalletBalance } = response.data.data;
       setEwalletBalance(EwalletBalance);
    
