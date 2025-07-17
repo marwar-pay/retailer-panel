@@ -16,12 +16,13 @@ import {
 } from '@mui/material';
 
 import { apiGet } from '../../../api/apiMethods';
+import { generateAndDownloadInvoice } from '../../../utils/generateInvoice';
 
 const PayoutSuccess = () => {
   const isFirstRender = useRef(true);
 
   const [qrData, setQrData] = useState([]);
- 
+
   const [searchInput, setSearchInput] = useState('');
   const [searchStartDate, setSearchStartDate] = useState('');
   const [searchEndDate, setSearchEndDate] = useState('');
@@ -44,18 +45,18 @@ const PayoutSuccess = () => {
       const end = new Date(searchEndDate);
       const diffTime = Math.abs(end - start);
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
-  
+
       // Restrict export to 15 days only
       if (exportCSV === "true" && diffDays >= 10) {
         alert("You can only export data for a maximum of 10 days.");
         return;
       }
       if ((searchStartDate && !searchEndDate) || (!searchStartDate && searchEndDate)) return;
-      
+
       const response = await apiGet(
         `${API_ENDPOINT}?page=${currentPage}&limit=${itemsPerPage}&keyword=${searchInput}&startDate=${searchStartDate}&endDate=${searchEndDate}&export=${exportCSV}`
       );
-      
+
       if (exportCSV === 'true') {
         if (!response.data) return;
         const blob = new Blob([response.data], { type: 'text/csv' });
@@ -66,17 +67,17 @@ const PayoutSuccess = () => {
         link.remove();
         return;
       }
-      
+
       const data = Array.isArray(response.data.data) ? response.data.data : [];
       setQrData(data);
-     
+
       setTotalDocs(response.data.totalDocs || 0);
       setTotalPages(Math.ceil((response.data.totalDocs || 0) / itemsPerPage));
       setIsLoading(false);
     } catch (error) {
       console.error('Error fetching data:', error);
       setQrData([]);
-     
+
       setIsLoading(false);
     }
   };
@@ -86,7 +87,7 @@ const PayoutSuccess = () => {
     const totalPages = Math.ceil(totalDocs / itemsPerPage)
     setTotalPages(totalPages);
   }, [currentPage, itemsPerPage, searchStartDate, searchEndDate]);
-  
+
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -105,9 +106,21 @@ const PayoutSuccess = () => {
     fetchData();
   };
 
+
+  const handleDownload = (qr) => {
+    const { amount, bankRRN, trxId, isSuccess, createdAt } = qr
+    generateAndDownloadInvoice({
+      amount: amount,
+      bankrrn: bankRRN,
+      transactionId: trxId,
+      status: isSuccess,
+      date: new Date(createdAt).toLocaleString()
+    });
+  };
+
   return (
     <>
-     <Grid
+      <Grid
         sx={{
           mb: 3,
           position: isSmallScreen ? 'relative' : 'sticky', // Remove sticky for small screens
@@ -116,30 +129,30 @@ const PayoutSuccess = () => {
           backgroundColor: 'white',
         }} className='setdesigntofix'
       >
-      <Grid sx={{ mb: 3, paddingTop: '20px', backgroundColor: 'white' }}>
-        <Grid container alignItems="center" sx={{ mb: 2 }}>
-          <Grid item xs>
-            <Typography variant="h5">PayOut Success Information</Typography>
+        <Grid sx={{ mb: 3, paddingTop: '20px', backgroundColor: 'white' }}>
+          <Grid container alignItems="center" sx={{ mb: 2 }}>
+            <Grid item xs>
+              <Typography variant="h5">PayOut Success Information</Typography>
+            </Grid>
+            <Button variant="contained" onClick={() => fetchData("true")}>Export</Button>
           </Grid>
-          <Button variant="contained" onClick={() => fetchData("true")}>Export</Button>
-        </Grid>
 
-        <Grid container spacing={3} alignItems="center" sx={{ mb: 3 }}>
-          <Grid item xs={12} md={3}>
-            <TextField label="Search by TxnID" variant="outlined" fullWidth value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
-          </Grid>
-          <Grid item xs={12} sm={3}>
-            <TextField label="Start Date" type="date" variant="outlined" fullWidth InputLabelProps={{ shrink: true }} value={searchStartDate} onChange={(e) => setSearchStartDate(e.target.value)} />
-          </Grid>
-          <Grid item xs={12} sm={3}>
-            <TextField label="End Date" type="date" variant="outlined" fullWidth InputLabelProps={{ shrink: true }} value={searchEndDate} onChange={(e) => setSearchEndDate(e.target.value)} />
-          </Grid>
-          <Grid item xs={12} sm={3}>
-            <Button variant="outlined" fullWidth onClick={handleReset}>Reset</Button>
+          <Grid container spacing={3} alignItems="center" sx={{ mb: 3 }}>
+            <Grid item xs={12} md={3}>
+              <TextField label="Search by TxnID" variant="outlined" fullWidth value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <TextField label="Start Date" type="date" variant="outlined" fullWidth InputLabelProps={{ shrink: true }} value={searchStartDate} onChange={(e) => setSearchStartDate(e.target.value)} />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <TextField label="End Date" type="date" variant="outlined" fullWidth InputLabelProps={{ shrink: true }} value={searchEndDate} onChange={(e) => setSearchEndDate(e.target.value)} />
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <Button variant="outlined" fullWidth onClick={handleReset}>Reset</Button>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
-</Grid>
       <TableContainer
         component={Paper}
         sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', p: 1 }}
@@ -151,36 +164,54 @@ const PayoutSuccess = () => {
               <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Transaction ID</strong></TableCell>
               <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Amount</strong></TableCell>
               <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Charge Amount</strong></TableCell>
-              <TableCell  sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Final Amount</strong></TableCell>
+              <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Final Amount</strong></TableCell>
               <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Bank RRN</strong></TableCell>
               <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Status</strong></TableCell>
               <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Date</strong></TableCell>
+              <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}><strong>Download Invoice</strong></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-          {isLoading ? (
-    <TableRow>
-      <TableCell colSpan={6} align="center">
-        Loading...
-      </TableCell>
-    </TableRow>
-  ) : qrData.length === 0 ? (
-    <TableRow>
-      <TableCell colSpan={6} align="center">
-        No data available.
-      </TableCell>
-    </TableRow>
-  ) : (
-    qrData.map((qr, index) => (
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={6} align="center">
+                  Loading...
+                </TableCell>
+              </TableRow>
+            ) : qrData.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={6} align="center">
+                  No data available.
+                </TableCell>
+              </TableRow>
+            ) : (
+              qrData.map((qr, index) => (
                 <TableRow key={qr._id}>
                   <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{index + 1 + (currentPage - 1) * itemsPerPage}</TableCell>
                   <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{qr.trxId || 'NA'}</TableCell>
                   <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{Number(qr.amount || 0).toFixed(2)}</TableCell>
                   <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{Number(qr.chargeAmount || 0).toFixed(2)}</TableCell>
                   <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{Number(qr.finalAmount || 0).toFixed(2)}</TableCell>
-                  <TableCell  sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{qr.bankRRN || 'NA'}</TableCell>
-                  <TableCell  sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', color: qr.isSuccess === 'Success' ? 'green' : 'red' }}>{qr.isSuccess || 'NA'}</TableCell>
+                  <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{qr.bankRRN || 'NA'}</TableCell>
+                  <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px', color: qr.isSuccess === 'Success' ? 'green' : 'red' }}>{qr.isSuccess || 'NA'}</TableCell>
                   <TableCell sx={{ border: '1px solid #ddd', whiteSpace: 'nowrap', padding: '8px' }}>{new Date(qr.createdAt).toLocaleString()}</TableCell>
+                  <Button
+                    onClick={() => handleDownload(qr)}
+                    sx={{
+                      border: '1px solid #ddd',
+                      whiteSpace: 'nowrap',
+                      // padding: '2px 10px',
+                      fontWeight: 'bold',
+                      backgroundColor: 'white',
+                      textTransform: 'none',
+                      boxShadow: 'none',
+                      '&:hover': {
+                        backgroundColor: '#f5f5f5',
+                      },
+                    }}
+                  >
+                    Download Invoice
+                  </Button>
                 </TableRow>
               ))
             )}
