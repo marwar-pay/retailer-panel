@@ -15,14 +15,13 @@ import {
 
 const generateRandomId = () => {
   const length = Math.floor(Math.random() * (20 - 13 + 1)) + 13; // Random length between 13 and 20
-  let randomString = '';
-  
-  // Generate a long enough random string
-  while (randomString.length < length) {
-    randomString += Math.random().toString(36).slice(2); // Append random characters
+  let randomNumber = '';
+
+  while (randomNumber.length < length) {
+    randomNumber += Math.floor(Math.random() * 10); // Append random digits
   }
 
-  return randomString.slice(0, length); // Trim to the desired length
+  return randomNumber.slice(0, length); // Ensure the length is exact
 };
 
 
