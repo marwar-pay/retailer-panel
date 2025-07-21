@@ -108,13 +108,15 @@ const PayoutSuccess = () => {
 
 
   const handleDownload = (qr) => {
-    const { amount, bankRRN, trxId, isSuccess, createdAt } = qr
+    const { amount, bankRRN, trxId, isSuccess, createdAt, ifsc, accountNumber } = qr
     generateAndDownloadInvoice({
       amount: amount,
       bankrrn: bankRRN,
       transactionId: trxId,
       status: isSuccess,
-      date: new Date(createdAt).toLocaleString()
+      date: new Date(createdAt).toLocaleString(),
+      ifsc,
+      accountNumber
     });
   };
 
