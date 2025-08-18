@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { apiGet, apiPost } from "../../api/apiMethods";
+import {useState } from "react";
 import {
   Container,
   TextField,
@@ -10,31 +8,22 @@ import {
   Alert,
   Snackbar,
   CircularProgress,
+  Stack,
 } from "@mui/material";
-
+import { apiPost } from "../../api/apiMethods";
 
 const generateRandomId = () => {
-  const length = Math.floor(Math.random() * (20 - 13 + 1)) + 13; // Random length between 13 and 20
-  let randomString = '';
-  
-  // Generate a long enough random string
+  const length = Math.floor(Math.random() * (20 - 13 + 1)) + 13;
+  let randomString = "";
   while (randomString.length < length) {
-    randomString += Math.random().toString(36).slice(2); // Append random characters
+    randomString += Math.random().toString(36).slice(2);
   }
-
-  return randomString.slice(0, length); // Trim to the desired length
+  return randomString.slice(0, length);
 };
 
-
-
-
-
 const PayoutGenerator = () => {
- 
-  const API_ENDPOINT = "apiUser/v1/userRoute/userInfo";
-  const [userData, setUserData] = useState(null);
   const [formData, setFormData] = useState({
-    userName: "",
+    userName: "Test User",
     mobileNumber: "",
     accountHolderName: "",
     accountNumber: "",
@@ -42,48 +31,75 @@ const PayoutGenerator = () => {
     trxId: generateRandomId(),
     amount: "",
     bankName: "",
-    authToken: "",  // Add trxAuthToken here
+    authToken: "FAKE_TOKEN_12345",
   });
+
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false); // To manage loader visibility
-  const [snackbarOpen, setSnackbarOpen] = useState(false); // To manage Snackbar visibility
+  const [loading, setLoading] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  // Mock submit (API ko call nahi karega)
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   try {
+  //     // fake response
+  //     const fakeRes = {
+  //       status: "success",
+  //       payoutId: generateRandomId(),
+  //       amount: formData.amount,
+  //       message: "Test payout successful (mock data)",
+  //     };
+  //     setResponse(fakeRes);
+  //     setError(null);
+  //     setSnackbarOpen(true);
+  //   } catch (err) {
+  //     setError("Fake error for testing");
+  //     setResponse(null);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Start loading
+    setLoading(true);
     try {
-      const res = await apiPost("apiAdmin/v1/payout/generatePayOut", { ...formData });
+      const res = await apiPost("apiAdmin/v1/payout/generatePayOut", {
+        ...formData,
+      });
       setResponse(res.data);
       setError(null);
-      setSnackbarOpen(true); // Show success message
+      setSnackbarOpen(true);
     } catch (err) {
       setError(err.response?.data || "An error occurred");
       setResponse(null);
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    apiGet(API_ENDPOINT)
-      .then((response) => {
-        setUserData(response.data.data);
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          userName: response.data.data.userName,
-          authToken: response.data.data.trxAuthToken, // Add trxAuthToken to formData
-        }));
-      })
-      .catch((error) => {
-        console.error("There was an error fetching the user data!", error);
-      });
-  }, []);
+  const handleNewTransaction = () => {
+    setResponse(null);
+    setError(null);
+    setFormData((prev) => ({
+      ...prev,
+      mobileNumber: "",
+      accountHolderName: "",
+      accountNumber: "",
+      ifscCode: "",
+      amount: "",
+      bankName: "",
+      trxId: generateRandomId(), // naya transaction id
+    }));
+  };
 
   return (
     <Container maxWidth="md" sx={{ mt: 5 }}>
@@ -94,6 +110,7 @@ const PayoutGenerator = () => {
         Welcome, {formData.userName || "User"}
       </Typography>
 
+      {/* ✅ Form hamesha dikhayenge */}
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2} sx={{ mt: 2 }}>
           <Grid item xs={12} sm={6}>
@@ -174,23 +191,50 @@ const PayoutGenerator = () => {
           color="primary"
           fullWidth
           sx={{ mt: 3 }}
-          disabled={loading} // Disable button while loading
+          disabled={loading}
         >
           Generate Payout
         </Button>
       </form>
 
+      {/* ✅ Loader */}
       {loading && (
         <CircularProgress sx={{ display: "block", margin: "20px auto" }} />
       )}
 
+      {/* ✅ Response section form ke niche */}
       {response && (
-        <Alert severity="success" sx={{ mt: 3 }}>
-          <Typography variant="h6">Response:</Typography>
-          <pre>{JSON.stringify(response, null, 2)}</pre>
-        </Alert>
+        <>
+          <Alert severity="success" sx={{ mt: 3 }}>
+            <Typography variant="h6">Response:</Typography>
+            <pre>{JSON.stringify(response, null, 2)}</pre>
+          </Alert>
+
+          <Stack
+            direction="row"
+            spacing={2}
+            justifyContent="center"
+            sx={{ mt: 3 }}
+          >
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={() => window.history.back()}
+            >
+              Back
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleNewTransaction}
+            >
+              New Transaction
+            </Button>
+          </Stack>
+        </>
       )}
 
+      {/* ✅ Error */}
       {error && (
         <Alert severity="error" sx={{ mt: 3 }}>
           <Typography variant="h6">Error:</Typography>
@@ -198,6 +242,7 @@ const PayoutGenerator = () => {
         </Alert>
       )}
 
+      {/* ✅ Snackbar */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
@@ -209,3 +254,5 @@ const PayoutGenerator = () => {
 };
 
 export default PayoutGenerator;
+
+
