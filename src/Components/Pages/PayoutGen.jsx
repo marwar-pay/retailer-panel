@@ -1,4 +1,7 @@
-import {useState } from "react";
+
+
+import { useEffect, useState } from "react";
+
 import {
   Container,
   TextField,
@@ -10,7 +13,8 @@ import {
   CircularProgress,
   Stack,
 } from "@mui/material";
-import { apiPost } from "../../api/apiMethods";
+import { apiGet, apiPost } from "../../api/apiMethods";
+
 
 const generateRandomId = () => {
   const length = Math.floor(Math.random() * (20 - 13 + 1)) + 13;
@@ -22,8 +26,11 @@ const generateRandomId = () => {
 };
 
 const PayoutGenerator = () => {
+  const API_ENDPOINT = "apiUser/v1/userRoute/userInfo";
+
+  const [userData, setUserData] = useState(null);
   const [formData, setFormData] = useState({
-    userName: "Test User",
+    userName: "",
     mobileNumber: "",
     accountHolderName: "",
     accountNumber: "",
@@ -31,7 +38,7 @@ const PayoutGenerator = () => {
     trxId: generateRandomId(),
     amount: "",
     bankName: "",
-    authToken: "FAKE_TOKEN_12345",
+    authToken: "",
   });
 
   const [response, setResponse] = useState(null);
@@ -43,30 +50,6 @@ const PayoutGenerator = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
-  // Mock submit (API ko call nahi karega)
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   try {
-  //     // fake response
-  //     const fakeRes = {
-  //       status: "success",
-  //       payoutId: generateRandomId(),
-  //       amount: formData.amount,
-  //       message: "Test payout successful (mock data)",
-  //     };
-  //     setResponse(fakeRes);
-  //     setError(null);
-  //     setSnackbarOpen(true);
-  //   } catch (err) {
-  //     setError("Fake error for testing");
-  //     setResponse(null);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -97,9 +80,24 @@ const PayoutGenerator = () => {
       ifscCode: "",
       amount: "",
       bankName: "",
-      trxId: generateRandomId(), // naya transaction id
+      trxId: generateRandomId(),
     }));
   };
+
+  useEffect(() => {
+    apiGet(API_ENDPOINT)
+      .then((response) => {
+        setUserData(response.data.data);
+        setFormData((prev) => ({
+          ...prev,
+          userName: response.data.data.userName,
+          authToken: response.data.data.trxAuthToken,
+        }));
+      })
+      .catch((error) => {
+        console.error("Error fetching user data!", error);
+      });
+  }, []);
 
   return (
     <Container maxWidth="md" sx={{ mt: 5 }}>
@@ -110,7 +108,6 @@ const PayoutGenerator = () => {
         Welcome, {formData.userName || "User"}
       </Typography>
 
-      {/* ✅ Form hamesha dikhayenge */}
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2} sx={{ mt: 2 }}>
           <Grid item xs={12} sm={6}>
@@ -197,12 +194,10 @@ const PayoutGenerator = () => {
         </Button>
       </form>
 
-      {/* ✅ Loader */}
       {loading && (
         <CircularProgress sx={{ display: "block", margin: "20px auto" }} />
       )}
 
-      {/* ✅ Response section form ke niche */}
       {response && (
         <>
           <Alert severity="success" sx={{ mt: 3 }}>
@@ -234,7 +229,6 @@ const PayoutGenerator = () => {
         </>
       )}
 
-      {/* ✅ Error */}
       {error && (
         <Alert severity="error" sx={{ mt: 3 }}>
           <Typography variant="h6">Error:</Typography>
@@ -242,7 +236,6 @@ const PayoutGenerator = () => {
         </Alert>
       )}
 
-      {/* ✅ Snackbar */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
@@ -254,5 +247,3 @@ const PayoutGenerator = () => {
 };
 
 export default PayoutGenerator;
-
-
